@@ -317,6 +317,70 @@ DISCOVERY directives  (форма 1-го ходу, бранч бренду 2-г�
 - **[open-design.ai](https://open-design.ai/)** — офіційна сторінка завантаження
 - **[GitHub релізи](https://github.com/nexu-io/open-design/releases)**
 
+### Запуск через Docker
+
+Запустіть Open Design без встановлення Node.js або pnpm локально.
+
+#### Вимоги
+
+* Docker Desktop
+* Docker Compose v2
+
+Перевірте Docker:
+
+```bash id="70jv9o"
+docker compose version
+```
+
+#### Запуск Open Design
+
+1. Клонуйте репозиторій, перейдіть до каталогу deploy і скопіюйте шаблон середовища:
+
+   ```bash
+   git clone https://github.com/nexu-io/open-design.git
+   cd open-design/deploy
+   cp .env.example .env
+   ```
+
+2. Згенеруйте безпечний токен:
+
+   ```bash
+   openssl rand -hex 32
+   ```
+
+3. Відкрийте `.env` у редакторі, знайдіть `OD_API_TOKEN=` і вставте згенерований токен.
+
+Потім запустіть сервіс:
+
+```bash
+docker compose up -d
+```
+
+Відкрийте у браузері:
+
+```text id="4s4xeh"
+http://localhost:7456
+```
+
+#### Поширені команди
+
+```bash id="gl95kp"
+# Перегляд логів
+docker compose logs -f
+
+# Перезапуск контейнерів
+docker compose restart
+
+# Зупинка контейнерів
+docker compose down
+
+# Завантаження останнього образу
+docker compose pull
+docker compose up -d
+```
+
+Докладніше про налаштування Docker та змінні середовища див. у [`QUICKSTART.md`](QUICKSTART.md).
+
 ### Запуск з вихідного коду
 
 ```bash
@@ -729,7 +793,7 @@ OD не зупиняється на коді. Та сама поверхня ч�
 Дякуємо всім, хто допоміг просувати Open Design — через код, документацію, зворотний зв'язок, нові навички, нові системи дизайну або навіть гостре питання. Кожен реальний внесок рахується, а стіна нижче — найпростіший спосіб сказати це вголос.
 
 <a href="https://github.com/nexu-io/open-design/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-29" alt="Контриб'ютори Open Design" />
+  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-31" alt="Контриб'ютори Open Design" />
 </a>
 
 Якщо ви злили свій перший PR — ласкаво просимо. Мітка [`good-first-issue`/`help-wanted`](https://github.com/nexu-io/open-design/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2C%22help+wanted%22) — це точка входу.
@@ -740,15 +804,15 @@ OD не зупиняється на коді. Та сама поверхня ч�
   <img alt="Open Design — метрики репозиторію" src="docs/assets/github-metrics.svg" />
 </picture>
 
-SVG вище перегенерується щодня [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) за допомогою [`lowlighter/metrics`](https://github.com/lowlighter/metrics). Зробіть ручне оновлення з вкладки **Actions**, якщо хочете швидше; для багатших плагінів (трафік, час відповіді) додайте секрет репозиторію `METRICS_TOKEN` з fine-grained PAT.
+SVG вище оновлюється лише після ручного запуску [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) з вкладки **Actions** за допомогою [`lowlighter/metrics`](https://github.com/lowlighter/metrics). Для багатших плагінів (трафік, час відповіді) додайте секрет репозиторію `METRICS_TOKEN` з fine-grained PAT.
 
 ## Історія зірок
 
 <a href="https://star-history.com/#nexu-io/open-design&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-29" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
-    <img alt="Історія зірок Open Design" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-31" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
+    <img alt="Історія зірок Open Design" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
   </picture>
 </a>
 

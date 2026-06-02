@@ -1006,7 +1006,7 @@ Daemon 啟動時從 `PATH` 自動檢測，無需配置。流式分發邏輯在 [
 感謝每一位讓 Open Design 變得更好的朋友 —— 無論是寫程式碼、修文檔、提 issue、加 skill 還是加 design system，每一次真實貢獻都會被記住。下面這面牆是最直觀的「Thank you」。
 
 <a href="https://github.com/nexu-io/open-design/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-29" alt="Open Design 貢獻者" />
+  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-31" alt="Open Design 貢獻者" />
 </a>
 
 第一次提 PR？歡迎從 [`good-first-issue`/`help-wanted`](https://github.com/nexu-io/open-design/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2C%22help+wanted%22) 標籤起步。
@@ -1017,15 +1017,15 @@ Daemon 啟動時從 `PATH` 自動檢測，無需配置。流式分發邏輯在 [
   <img alt="Open Design 倉庫指標" src="docs/assets/github-metrics.svg" />
 </picture>
 
-上面的 SVG 由 [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) 藉助 [`lowlighter/metrics`](https://github.com/lowlighter/metrics) 每天自動重新生成。想要立刻重新整理可以去 **Actions** 選項卡手動觸發；想開啟更豐富的外掛（traffic、follow-up time 等）可在倉庫 secrets 里加一個細粒度 PAT 命名為 `METRICS_TOKEN`。
+上面的 SVG 只會在 **Actions** 選項卡手動觸發 [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) 時，藉助 [`lowlighter/metrics`](https://github.com/lowlighter/metrics) 重新整理。想開啟更豐富的外掛（traffic、follow-up time 等）可在倉庫 secrets 里加一個細粒度 PAT 命名為 `METRICS_TOKEN`。
 
 ## Star History
 
 <a href="https://star-history.com/#nexu-io/open-design&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-29" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
-    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-31" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
+    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
   </picture>
 </a>
 

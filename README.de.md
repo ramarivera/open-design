@@ -316,6 +316,70 @@ Der schnellste Weg, Open Design auszuprobieren, ist die vorgefertigte Desktop-Ap
 - **[open-design.ai](https://open-design.ai/)** — offizielle Download-Seite
 - **[GitHub Releases](https://github.com/nexu-io/open-design/releases)**
 
+### Mit Docker ausführen
+
+Führen Sie Open Design aus, ohne Node.js oder pnpm lokal zu installieren.
+
+#### Voraussetzungen
+
+* Docker Desktop
+* Docker Compose v2
+
+Docker überprüfen:
+
+```bash id="70jv9o"
+docker compose version
+```
+
+#### Open Design starten
+
+1. Klonen Sie das Repository, wechseln Sie in das deploy-Verzeichnis und kopieren Sie die Umgebungsvorlage:
+
+   ```bash
+   git clone https://github.com/nexu-io/open-design.git
+   cd open-design/deploy
+   cp .env.example .env
+   ```
+
+2. Generieren Sie ein sicheres Token:
+
+   ```bash
+   openssl rand -hex 32
+   ```
+
+3. Öffnen Sie `.env` in Ihrem Editor, suchen Sie `OD_API_TOKEN=` und fügen Sie das generierte Token ein.
+
+Starten Sie dann den Dienst:
+
+```bash
+docker compose up -d
+```
+
+Öffnen Sie im Browser:
+
+```text id="4s4xeh"
+http://localhost:7456
+```
+
+#### Häufige Befehle
+
+```bash id="gl95kp"
+# Logs anzeigen
+docker compose logs -f
+
+# Container neu starten
+docker compose restart
+
+# Container stoppen
+docker compose down
+
+# Neuestes Image pullen
+docker compose pull
+docker compose up -d
+```
+
+Für erweiterte Docker-Konfiguration und Umgebungsvariablen siehe [`QUICKSTART.de.md`](QUICKSTART.de.md).
+
 ### Aus dem Quellcode ausführen
 
 ```bash
@@ -726,7 +790,7 @@ Vollständiger Walkthrough, Merge-Messlatte, Code Style und was wir nicht annehm
 Danke an alle, die Open Design vorangebracht haben: durch Code, Docs, Feedback, neue Skills, neue Design Systems oder auch ein scharfes Issue. Jeder echte Beitrag zählt, und die Wand unten ist die einfachste Art, das laut zu sagen.
 
 <a href="https://github.com/nexu-io/open-design/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-29" alt="Open Design contributors" />
+  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-31" alt="Open Design contributors" />
 </a>
 
 Wenn Sie Ihren ersten PR gemergt haben: willkommen. Das Label [`good-first-issue`/`help-wanted`](https://github.com/nexu-io/open-design/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2C%22help+wanted%22) ist der Einstiegspunkt.
@@ -737,15 +801,15 @@ Wenn Sie Ihren ersten PR gemergt haben: willkommen. Das Label [`good-first-issue
   <img alt="Open Design — repository metrics" src="docs/assets/github-metrics.svg" />
 </picture>
 
-Das SVG oben wird täglich von [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) mit [`lowlighter/metrics`](https://github.com/lowlighter/metrics) regeneriert. Lösen Sie auf dem **Actions** Tab manuell eine Aktualisierung aus, wenn Sie sie früher brauchen; für reichere Plugins (traffic, follow-up time) fügen Sie ein `METRICS_TOKEN` Repository Secret mit einem fine-grained PAT hinzu.
+Das SVG oben wird nur aktualisiert, wenn [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) im **Actions** Tab manuell mit [`lowlighter/metrics`](https://github.com/lowlighter/metrics) ausgelöst wird. Für reichere Plugins (traffic, follow-up time) fügen Sie ein `METRICS_TOKEN` Repository Secret mit einem fine-grained PAT hinzu.
 
 ## Star-Historie
 
 <a href="https://star-history.com/#nexu-io/open-design&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-29" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
-    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-31" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
+    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
   </picture>
 </a>
 

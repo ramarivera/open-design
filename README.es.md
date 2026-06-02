@@ -787,7 +787,7 @@ Walkthrough completo, estándar de merge, code style y lo que no aceptamos → [
 Gracias a todas las personas que han ayudado a mover Open Design hacia adelante: con código, docs, feedback, nuevas skills, nuevos design systems o incluso un issue preciso. Toda contribución real cuenta, y el muro de abajo es la forma más simple de decirlo en voz alta.
 
 <a href="https://github.com/nexu-io/open-design/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-29" alt="Contribuidores de Open Design" />
+  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-31" alt="Contribuidores de Open Design" />
 </a>
 
 Si ya enviaste tu primer PR, bienvenido. La etiqueta [`good-first-issue`](https://github.com/nexu-io/open-design/labels/good-first-issue) es el punto de entrada.
@@ -798,15 +798,15 @@ Si ya enviaste tu primer PR, bienvenido. La etiqueta [`good-first-issue`](https:
   <img alt="Open Design — repository metrics" src="docs/assets/github-metrics.svg" />
 </picture>
 
-El SVG anterior se regenera diariamente mediante [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) usando [`lowlighter/metrics`](https://github.com/lowlighter/metrics). Ejecuta un refresh manual desde la pestaña **Actions** si lo quieres antes; para plugins más ricos (traffic, follow-up time), añade un secret `METRICS_TOKEN` con un PAT fine-grained.
+El SVG anterior solo se actualiza cuando [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) se ejecuta manualmente desde la pestaña **Actions** usando [`lowlighter/metrics`](https://github.com/lowlighter/metrics). Para plugins más ricos (traffic, follow-up time), añade un secret `METRICS_TOKEN` con un PAT fine-grained.
 
 ## Historial de estrellas
 
 <a href="https://star-history.com/#nexu-io/open-design&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-29" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
-    <img alt="Historial de estrellas de Open Design" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-31" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
+    <img alt="Historial de estrellas de Open Design" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
   </picture>
 </a>
 

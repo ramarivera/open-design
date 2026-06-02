@@ -317,6 +317,70 @@ DISCOVERY directives  (turn-1 form, turn-2 brand branch, TodoWrite, 5-dim critiq
 - **[open-design.ai](https://open-design.ai/)** — официальная страница загрузки
 - **[GitHub-релизы](https://github.com/nexu-io/open-design/releases)**
 
+### Запуск через Docker
+
+Запустите Open Design без установки Node.js или pnpm локально.
+
+#### Требования
+
+* Docker Desktop
+* Docker Compose v2
+
+Проверьте Docker:
+
+```bash id="70jv9o"
+docker compose version
+```
+
+#### Запуск Open Design
+
+1. Клонируйте репозиторий, перейдите в каталог deploy и скопируйте шаблон окружения:
+
+   ```bash
+   git clone https://github.com/nexu-io/open-design.git
+   cd open-design/deploy
+   cp .env.example .env
+   ```
+
+2. Сгенерируйте безопасный токен:
+
+   ```bash
+   openssl rand -hex 32
+   ```
+
+3. Откройте `.env` в редакторе, найдите `OD_API_TOKEN=` и вставьте сгенерированный токен.
+
+Затем запустите сервис:
+
+```bash
+docker compose up -d
+```
+
+Откройте в браузере:
+
+```text id="4s4xeh"
+http://localhost:7456
+```
+
+#### Часто используемые команды
+
+```bash id="gl95kp"
+# Просмотр логов
+docker compose logs -f
+
+# Перезапуск контейнеров
+docker compose restart
+
+# Остановка контейнеров
+docker compose down
+
+# Загрузка последнего образа
+docker compose pull
+docker compose up -d
+```
+
+Дополнительную информацию о настройке Docker и переменных окружения см. в [`QUICKSTART.md`](QUICKSTART.md).
+
 ### Запуск из исходников
 
 ```bash
@@ -729,7 +793,7 @@ Issues, PR, новые skills и новые design systems приветству�
 Спасибо всем, кто помогает двигать Open Design вперёд — кодом, документацией, обратной связью, новыми skills, новыми design systems или просто точным issue. Вклад любого реального масштаба здесь важен, а стена ниже — самый простой способ сказать это вслух.
 
 <a href="https://github.com/nexu-io/open-design/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-29" alt="Contributors Open Design" />
+  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-31" alt="Contributors Open Design" />
 </a>
 
 Если вы только что отправили свой первый PR — добро пожаловать. Метка [`good-first-issue`/`help-wanted`](https://github.com/nexu-io/open-design/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2C%22help+wanted%22) — хорошая точка входа.
@@ -740,15 +804,15 @@ Issues, PR, новые skills и новые design systems приветству�
   <img alt="Open Design — repository metrics" src="docs/assets/github-metrics.svg" />
 </picture>
 
-SVG выше ежедневно пересобирается workflow [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) с помощью [`lowlighter/metrics`](https://github.com/lowlighter/metrics). Если нужен refresh раньше, запустите workflow вручную во вкладке **Actions**; для более богатых плагинов (traffic, follow-up time) добавьте секрет репозитория `METRICS_TOKEN` с fine-grained PAT.
+SVG выше обновляется только при ручном запуске workflow [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) во вкладке **Actions** с помощью [`lowlighter/metrics`](https://github.com/lowlighter/metrics). Для более богатых плагинов (traffic, follow-up time) добавьте секрет репозитория `METRICS_TOKEN` с fine-grained PAT.
 
 ## История звёзд
 
 <a href="https://star-history.com/#nexu-io/open-design&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-29" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
-    <img alt="История звёзд Open Design" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-31" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
+    <img alt="История звёзд Open Design" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
   </picture>
 </a>
 

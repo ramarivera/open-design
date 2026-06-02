@@ -316,6 +316,70 @@ DISCOVERY 指令         （turn-1 表单、turn-2 品牌分支、TodoWrite、�
 - **[open-design.ai](https://open-design.ai/)** —— 官方下载页
 - **[GitHub releases](https://github.com/nexu-io/open-design/releases)**
 
+### 用 Docker 运行
+
+无需在本机安装 Node.js 或 pnpm 即可运行 Open Design。
+
+#### 环境需求
+
+* Docker Desktop
+* Docker Compose v2
+
+验证 Docker：
+
+```bash id="70jv9o"
+docker compose version
+```
+
+#### 启动 Open Design
+
+1. 克隆仓库，进入 deploy 目录，复制环境配置模板：
+
+   ```bash
+   git clone https://github.com/nexu-io/open-design.git
+   cd open-design/deploy
+   cp .env.example .env
+   ```
+
+2. 生成安全令牌：
+
+   ```bash
+   openssl rand -hex 32
+   ```
+
+3. 用编辑器打开 `.env`，找到 `OD_API_TOKEN=`，将生成的令牌粘贴进去。
+
+然后启动服务：
+
+```bash
+docker compose up -d
+```
+
+在浏览器中打开：
+
+```text id="4s4xeh"
+http://localhost:7456
+```
+
+#### 常用命令
+
+```bash id="gl95kp"
+# 查看日志
+docker compose logs -f
+
+# 重启容器
+docker compose restart
+
+# 停止容器
+docker compose down
+
+# 拉取最新镜像
+docker compose pull
+docker compose up -d
+```
+
+更多 Docker 配置与环境变量请参阅 [`QUICKSTART.zh-CN.md`](QUICKSTART.zh-CN.md)。
+
 ### 从源码运行
 
 ```bash
@@ -722,7 +786,7 @@ Daemon 启动时从 `PATH` 自动检测，无需配置。流式分发逻辑在 [
 感谢每一位让 Open Design 变得更好的朋友 —— 无论是写代码、修文档、提 issue、加 skill 还是加 design system，每一次真实贡献都会被记住。下面这面墙是最直观的「Thank you」。
 
 <a href="https://github.com/nexu-io/open-design/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-29" alt="Open Design 贡献者" />
+  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-31" alt="Open Design 贡献者" />
 </a>
 
 第一次提 PR？欢迎从 [`good-first-issue`/`help-wanted`](https://github.com/nexu-io/open-design/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2C%22help+wanted%22) 标签起步。
@@ -733,15 +797,15 @@ Daemon 启动时从 `PATH` 自动检测，无需配置。流式分发逻辑在 [
   <img alt="Open Design 仓库指标" src="docs/assets/github-metrics.svg" />
 </picture>
 
-上面的 SVG 由 [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) 借助 [`lowlighter/metrics`](https://github.com/lowlighter/metrics) 每天自动重新生成。想要立刻刷新可以去 **Actions** 选项卡手动触发；想开启更丰富的插件（traffic、follow-up time 等）可在仓库 secrets 里加一个细粒度 PAT 命名为 `METRICS_TOKEN`。
+上面的 SVG 只会在 **Actions** 选项卡手动触发 [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) 时，借助 [`lowlighter/metrics`](https://github.com/lowlighter/metrics) 刷新。想开启更丰富的插件（traffic、follow-up time 等）可在仓库 secrets 里加一个细粒度 PAT 命名为 `METRICS_TOKEN`。
 
 ## Star History
 
 <a href="https://star-history.com/#nexu-io/open-design&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-29" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
-    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-31" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
+    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
   </picture>
 </a>
 

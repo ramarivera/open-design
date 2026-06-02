@@ -319,6 +319,70 @@ DISCOVERY directives  (turn-1 form, turn-2 brand branch, TodoWrite, 5-dim critiq
 - **[open-design.ai](https://open-design.ai/)** — صفحة التنزيل الرسمية
 - **[إصدارات GitHub](https://github.com/nexu-io/open-design/releases)**
 
+### التشغيل باستخدام Docker
+
+قم بتشغيل Open Design دون تثبيت Node.js أو pnpm محليًا.
+
+#### المتطلبات
+
+* Docker Desktop
+* Docker Compose v2
+
+تحقق من Docker:
+
+```bash id="70jv9o"
+docker compose version
+```
+
+#### بدء تشغيل Open Design
+
+1. استنسخ المستودع، وانتقل إلى مجلد deploy، وانسخ قالب البيئة:
+
+   ```bash
+   git clone https://github.com/nexu-io/open-design.git
+   cd open-design/deploy
+   cp .env.example .env
+   ```
+
+2. أنشئ رمزًا آمنًا:
+
+   ```bash
+   openssl rand -hex 32
+   ```
+
+3. افتح `.env` في محرر النصوص، وابحث عن `OD_API_TOKEN=`، والصق الرمز الذي أنشأته.
+
+ثم ابدأ الخدمة:
+
+```bash
+docker compose up -d
+```
+
+افتح في المتصفح:
+
+```text id="4s4xeh"
+http://localhost:7456
+```
+
+#### الأوامر الشائعة
+
+```bash id="gl95kp"
+# عرض السجلات
+docker compose logs -f
+
+# إعادة تشغيل الحاويات
+docker compose restart
+
+# إيقاف الحاويات
+docker compose down
+
+# سحب أحدث صورة
+docker compose pull
+docker compose up -d
+```
+
+لإعدادات Docker المتقدمة ومتغيرات البيئة، راجع [`QUICKSTART.md`](QUICKSTART.md).
+
 ### التشغيل من المصدر
 
 ```bash
@@ -800,7 +864,7 @@ Issues و PRs و skills جديدة وأنظمة تصميم جديدة، كلّه
 شكراً لكلّ من ساعد في دفع Open Design للأمام — بكود، بوثائق، بملاحظات، بـ skills جديدة، بأنظمة تصميم جديدة، أو حتى بـ issue حادّة. كلّ مساهمة حقيقية تهمّ، والجدار أدناه أسهل طريقة لقول ذلك علناً.
 
 <a href="https://github.com/nexu-io/open-design/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-29" alt="Open Design contributors" />
+  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-31" alt="Open Design contributors" />
 </a>
 
 إن شحنت أوّل PR — مرحباً. تصنيف [`good-first-issue`](https://github.com/nexu-io/open-design/labels/good-first-issue) هو نقطة الدخول.
@@ -811,15 +875,15 @@ Issues و PRs و skills جديدة وأنظمة تصميم جديدة، كلّه
   <img alt="Open Design — repository metrics" src="docs/assets/github-metrics.svg" />
 </picture>
 
-يُعاد توليد SVG أعلاه يومياً عبر [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) باستخدام [`lowlighter/metrics`](https://github.com/lowlighter/metrics). أطلق تحديثاً يدوياً من تبويب **Actions** إن أردته أسرع؛ لإضافات أغنى (traffic، follow-up time)، أضف سرّ مستودع `METRICS_TOKEN` بـ PAT دقيق التحكّم.
+لا يُحدَّث SVG أعلاه إلا عند تشغيل [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) يدوياً من تبويب **Actions** باستخدام [`lowlighter/metrics`](https://github.com/lowlighter/metrics). لإضافات أغنى (traffic، follow-up time)، أضف سرّ مستودع `METRICS_TOKEN` بـ PAT دقيق التحكّم.
 
 ## تاريخ النجوم
 
 <a href="https://star-history.com/#nexu-io/open-design&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-29" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
-    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-31" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
+    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
   </picture>
 </a>
 

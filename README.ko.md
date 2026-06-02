@@ -316,6 +316,70 @@ Open Design을 가장 빠르게 사용해 보는 방법은 사전 빌드된 데�
 - **[open-design.ai](https://open-design.ai/)** — 공식 다운로드 페이지
 - **[GitHub 릴리스](https://github.com/nexu-io/open-design/releases)**
 
+### Docker로 실행
+
+로컬에 Node.js나 pnpm을 설치하지 않고 Open Design을 실행할 수 있습니다.
+
+#### 요구 사항
+
+* Docker Desktop
+* Docker Compose v2
+
+Docker 확인:
+
+```bash id="70jv9o"
+docker compose version
+```
+
+#### Open Design 시작
+
+1. 리포지토리를 클론하고 deploy 디렉토리로 이동한 후 환경 템플릿을 복사합니다:
+
+   ```bash
+   git clone https://github.com/nexu-io/open-design.git
+   cd open-design/deploy
+   cp .env.example .env
+   ```
+
+2. 보안 토큰을 생성합니다:
+
+   ```bash
+   openssl rand -hex 32
+   ```
+
+3. 편집기에서 `.env`를 열고 `OD_API_TOKEN=`을 찾아 생성된 토큰을 붙여넣습니다.
+
+서비스를 시작합니다:
+
+```bash
+docker compose up -d
+```
+
+브라우저에서 엽니다:
+
+```text id="4s4xeh"
+http://localhost:7456
+```
+
+#### 일반 명령어
+
+```bash id="gl95kp"
+# 로그 보기
+docker compose logs -f
+
+# 컨테이너 재시작
+docker compose restart
+
+# 컨테이너 중지
+docker compose down
+
+# 최신 이미지 가져오기
+docker compose pull
+docker compose up -d
+```
+
+고급 Docker 구성 및 환경 변수는 [`QUICKSTART.md`](QUICKSTART.md)를 참조하세요.
+
 ### 소스에서 실행
 
 ```bash
@@ -726,7 +790,7 @@ daemon 부팅 시 `PATH`에서 자동 감지됩니다. 설정 필요 없음. 스
 Open Design을 앞으로 나아가게 도와준 모든 분께 감사드립니다 — 코드, 문서, 피드백, 새 skill, 새 디자인 시스템, 또는 날카로운 이슈 하나라도. 모든 진짜 기여가 의미 있고, 아래의 벽이 가장 직접적인 "감사합니다"입니다.
 
 <a href="https://github.com/nexu-io/open-design/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-29" alt="Open Design 컨트리뷰터" />
+  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-31" alt="Open Design 컨트리뷰터" />
 </a>
 
 첫 PR을 보냈다면 — 환영합니다. [`good-first-issue`/`help-wanted`](https://github.com/nexu-io/open-design/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2C%22help+wanted%22) 레이블이 시작점입니다.
@@ -737,15 +801,15 @@ Open Design을 앞으로 나아가게 도와준 모든 분께 감사드립니다
   <img alt="Open Design — 저장소 지표" src="docs/assets/github-metrics.svg" />
 </picture>
 
-위의 SVG는 [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml)이 [`lowlighter/metrics`](https://github.com/lowlighter/metrics)를 사용해 매일 자동으로 다시 생성합니다. 즉시 새로 고치려면 **Actions** 탭에서 수동 트리거하세요; 더 풍부한 플러그인(traffic, follow-up time 등)을 켜려면 저장소 secrets에 fine-grained PAT를 `METRICS_TOKEN`이라는 이름으로 추가하세요.
+위의 SVG는 **Actions** 탭에서 [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml)을 수동으로 트리거할 때만 [`lowlighter/metrics`](https://github.com/lowlighter/metrics)를 사용해 갱신됩니다. 더 풍부한 플러그인(traffic, follow-up time 등)을 켜려면 저장소 secrets에 fine-grained PAT를 `METRICS_TOKEN`이라는 이름으로 추가하세요.
 
 ## Star History
 
 <a href="https://star-history.com/#nexu-io/open-design&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-29" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
-    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-31" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
+    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
   </picture>
 </a>
 

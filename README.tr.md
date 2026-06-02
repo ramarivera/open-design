@@ -308,6 +308,70 @@ Open Design'ı denemenin en hızlı yolu prebuilt desktop app'tir; Node yok, pnp
 - **[open-design.ai](https://open-design.ai/)** — resmi indirme sayfası
 - **[GitHub releases](https://github.com/nexu-io/open-design/releases)**
 
+### Docker ile çalıştır
+
+Open Design'ı Node.js veya pnpm yüklemeden çalıştırın.
+
+#### Gereksinimler
+
+* Docker Desktop
+* Docker Compose v2
+
+Docker'ı doğrulayın:
+
+```bash id="70jv9o"
+docker compose version
+```
+
+#### Open Design'ı başlatın
+
+1. Depoyu klonlayın, deploy dizinine gidin ve ortam şablonunu kopyalayın:
+
+   ```bash
+   git clone https://github.com/nexu-io/open-design.git
+   cd open-design/deploy
+   cp .env.example .env
+   ```
+
+2. Güvenli bir token oluşturun:
+
+   ```bash
+   openssl rand -hex 32
+   ```
+
+3. `.env` dosyasını düzenleyicide açın, `OD_API_TOKEN=` satırını bulun ve oluşturduğunuz token'ı yapıştırın.
+
+Ardından servisi başlatın:
+
+```bash
+docker compose up -d
+```
+
+Tarayıcınızda açın:
+
+```text id="4s4xeh"
+http://localhost:7456
+```
+
+#### Sık kullanılan komutlar
+
+```bash id="gl95kp"
+# Günlükleri görüntüle
+docker compose logs -f
+
+# Konteynerları yeniden başlat
+docker compose restart
+
+# Konteynerları durdur
+docker compose down
+
+# En son imajı çek
+docker compose pull
+docker compose up -d
+```
+
+Gelişmiş Docker yapılandırması ve ortam değişkenleri için [`QUICKSTART.md`](QUICKSTART.md) bölümüne bakın.
+
 ### Kaynaktan çalıştır
 
 ```bash
@@ -887,7 +951,7 @@ Tam walkthrough, merge çıtası, code style ve kabul etmediklerimiz → [`CONTR
 Open Design'ı kod, doküman, feedback, yeni skill, yeni design system veya keskin bir issue ile ileri taşıyan herkese teşekkürler. Her gerçek katkı önemlidir; aşağıdaki wall bunu yüksek sesle söylemenin en kolay yolu.
 
 <a href="https://github.com/nexu-io/open-design/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-29" alt="Open Design contributors" />
+  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-31" alt="Open Design contributors" />
 </a>
 
 İlk PR'ını gönderdiysen hoş geldin. [`good-first-issue`/`help-wanted`](https://github.com/nexu-io/open-design/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2C%22help+wanted%22) label'ı giriş noktasıdır.
@@ -898,15 +962,15 @@ Open Design'ı kod, doküman, feedback, yeni skill, yeni design system veya kesk
   <img alt="Open Design — repository metrics" src="docs/assets/github-metrics.svg" />
 </picture>
 
-Yukarıdaki SVG [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) tarafından [`lowlighter/metrics`](https://github.com/lowlighter/metrics) kullanılarak günlük yenilenir. Daha erken istiyorsan **Actions** tab'inden manuel refresh tetikle; daha zengin plugin'ler (traffic, follow-up time) için fine-grained PAT ile `METRICS_TOKEN` repository secret ekle.
+Yukarıdaki SVG yalnızca [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) **Actions** tab'inden manuel tetiklendiğinde [`lowlighter/metrics`](https://github.com/lowlighter/metrics) kullanılarak yenilenir. Daha zengin plugin'ler (traffic, follow-up time) için fine-grained PAT ile `METRICS_TOKEN` repository secret ekle.
 
 ## Star History
 
 <a href="https://star-history.com/#nexu-io/open-design&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-29" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
-    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-31" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
+    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
   </picture>
 </a>
 

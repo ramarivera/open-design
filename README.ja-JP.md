@@ -317,6 +317,70 @@ Open Design を最速で試す方法は、ビルド済みのデスクトップ�
 - **[open-design.ai](https://open-design.ai/)** — 公式ダウンロードページ
 - **[GitHub リリース](https://github.com/nexu-io/open-design/releases)**
 
+### Docker で実行
+
+Node.js や pnpm をローカルにインストールせずに Open Design を実行できます。
+
+#### 必要条件
+
+* Docker Desktop
+* Docker Compose v2
+
+Docker を確認：
+
+```bash id="70jv9o"
+docker compose version
+```
+
+#### Open Design を起動
+
+1. リポジトリをクローンし、deploy ディレクトリに移動して、環境テンプレートをコピーします：
+
+   ```bash
+   git clone https://github.com/nexu-io/open-design.git
+   cd open-design/deploy
+   cp .env.example .env
+   ```
+
+2. セキュアなトークンを生成します：
+
+   ```bash
+   openssl rand -hex 32
+   ```
+
+3. エディタで `.env` を開き、`OD_API_TOKEN=` を見つけて、生成したトークンを貼り付けます。
+
+サービスを起動します：
+
+```bash
+docker compose up -d
+```
+
+ブラウザで開きます：
+
+```text id="4s4xeh"
+http://localhost:7456
+```
+
+#### よく使うコマンド
+
+```bash id="gl95kp"
+# ログを表示
+docker compose logs -f
+
+# コンテナを再起動
+docker compose restart
+
+# コンテナを停止
+docker compose down
+
+# 最新イメージをプル
+docker compose pull
+docker compose up -d
+```
+
+Docker の詳細な設定と環境変数については [`QUICKSTART.ja-JP.md`](QUICKSTART.ja-JP.md) を参照してください。
+
 ### ソースから実行
 
 ```bash
@@ -723,7 +787,7 @@ Issue、PR、新 Skill、新 Design System を歓迎します。最も効果の�
 コード、ドキュメント、フィードバック、新 Skill、新 Design System、あるいは鋭い Issue — あらゆる形で Open Design を前進させてくださったすべての方に感謝します。すべての実質的なコントリビューションは大切であり、以下のウォールは最もシンプルな感謝の表明です。
 
 <a href="https://github.com/nexu-io/open-design/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-29" alt="Open Design コントリビューター" />
+  <img src="https://contrib.rocks/image?repo=nexu-io/open-design&cache_bust=2026-05-31" alt="Open Design コントリビューター" />
 </a>
 
 初めての PR を送った方 — ようこそ。[`good-first-issue`/`help-wanted`](https://github.com/nexu-io/open-design/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22%2C%22help+wanted%22) ラベルがエントリポイントです。
@@ -734,15 +798,15 @@ Issue、PR、新 Skill、新 Design System を歓迎します。最も効果の�
   <img alt="Open Design リポジトリメトリクス" src="docs/assets/github-metrics.svg" />
 </picture>
 
-上記の SVG は [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) が [`lowlighter/metrics`](https://github.com/lowlighter/metrics) を使って毎日自動再生成しています。すぐに更新したい場合は **Actions** タブから手動トリガーしてください。より充実したプラグイン（traffic、follow-up time など）を有効にするには、リポジトリシークレットに細粒度 PAT を `METRICS_TOKEN` として追加してください。
+上記の SVG は **Actions** タブから [`.github/workflows/metrics.yml`](.github/workflows/metrics.yml) を手動トリガーした場合にのみ、[`lowlighter/metrics`](https://github.com/lowlighter/metrics) を使って更新されます。より充実したプラグイン（traffic、follow-up time など）を有効にするには、リポジトリシークレットに細粒度 PAT を `METRICS_TOKEN` として追加してください。
 
 ## Star History
 
 <a href="https://star-history.com/#nexu-io/open-design&Date">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-29" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
-    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-29" />
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&theme=dark&cache_bust=2026-05-31" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
+    <img alt="Open Design star history" src="https://api.star-history.com/svg?repos=nexu-io/open-design&type=Date&cache_bust=2026-05-31" />
   </picture>
 </a>
 
