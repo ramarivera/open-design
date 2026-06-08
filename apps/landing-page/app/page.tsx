@@ -9,21 +9,17 @@
  * islands only when behavior is needed.
  */
 
-import { Header, type HeaderProps } from './_components/header';
+import { AMR_URL, Header, type HeaderProps } from './_components/header';
 import { Wire } from './_components/wire';
 import {
   DEFAULT_LOCALE,
-  LANDING_LOCALES,
   getCommonCopy,
   getHomePageCopy,
-  getLocaleDefinition,
-  localePath,
+  getLandingUiCopy,
   localizedHref,
   type LandingLocaleCode,
 } from './i18n';
 import {
-  heroImage,
-  heroImageSrcset,
   imageAsset,
   PRECISE_LAZY_PLACEHOLDER,
 } from './image-assets';
@@ -70,9 +66,8 @@ const arrowOut = (
 );
 
 const arrowPlus = (
-  <svg viewBox='0 0 24 24'>
-    <circle cx='12' cy='12' r='9' />
-    <path d='M9 12h6M12 9v6' />
+  <svg className='icon-fill' viewBox='0 0 24 24'>
+    <path d='M12 2C17.52 2 22 6.48 22 12C22 17.52 17.52 22 12 22C6.48 22 2 17.52 2 12C2 6.48 6.48 2 12 2ZM12 20C16.42 20 20 16.42 20 12C20 7.58 16.42 4 12 4C7.58 4 4 7.58 4 12C4 16.42 7.58 20 12 20ZM13 12H16L12 16L8 12H11V8H13V12Z' />
   </svg>
 );
 
@@ -212,6 +207,7 @@ export default function Page({
   const systems = fmt(counts.systems);
   const commonCopy = getCommonCopy(locale);
   const home = getHomePageCopy(locale);
+  const ui = getLandingUiCopy(locale);
   const pcopy = getPluginsCopy(locale);
   // Labs pills mirror the live `/plugins/templates/` category strip: an
   // "All" chip plus the top categories by count, labelled and counted
@@ -225,12 +221,31 @@ export default function Page({
         count: pad2(c.count),
       }))
     : [];
-  const localeDef = getLocaleDefinition(locale);
-  const localeOptions = LANDING_LOCALES.map((entry) => ({
-    ...entry,
-    href: localePath(entry.code, '/'),
-  }));
   const href = (path: string) => localizedHref(path, locale);
+
+  /*
+   * Frontier model brands AMR routes to, shown as a monochrome logo strip
+   * (mirrors opencode's Zen band). Names are display-only and not part of
+   * the localized copy — they are product/brand marks. The SVGs in
+   * /public/agents/ use fill="currentColor"; rendered through <img> they
+   * resolve against the SVG's own default ink (near-black), so the strip
+   * reads as one dark monochrome row. (An <img>-loaded SVG renders in an
+   * isolated context and cannot inherit the page's `color`, so recoloring
+   * the strip would require inlining the SVGs or a CSS mask — not a one-
+   * line `color:` change.)
+   */
+  const amrModelLogos: ReadonlyArray<{ slug: string; name: string }> = [
+    { slug: 'openai', name: 'OpenAI' },
+    { slug: 'anthropic', name: 'Anthropic' },
+    { slug: 'gemini', name: 'Google Gemini' },
+    { slug: 'deepseek', name: 'DeepSeek' },
+    { slug: 'zhipu', name: 'Zhipu GLM' },
+    { slug: 'moonshot', name: 'Moonshot Kimi' },
+    { slug: 'qwen', name: 'Qwen' },
+    { slug: 'minimax', name: 'MiniMax' },
+    { slug: 'xiaomi', name: 'Xiaomi MiMo' },
+    { slug: 'xai', name: 'xAI' },
+  ];
 
   return (
     <>
@@ -245,82 +260,6 @@ export default function Page({
       <div className='shell'>
         {/* ====== STICKY CHROME (topbar + nav as one unit) ====== */}
         <div className='site-chrome' data-chrome-headroom>
-        {/* ====== TOP METADATA STRIP ====== */}
-        <div className='topbar' data-od-id='topbar'>
-          <div className='container topbar-inner'>
-            <span>
-              <b>OD / 2026</b>
-              {NBSP}·{NBSP}
-              {commonCopy.topbar.issue ?? 'Vol. 01 / Issue Nº 26'}
-            </span>
-            <span className='mid'>
-              <span>
-                {commonCopy.topbar.filedUnder}{' '}
-                <b className='coral'>{commonCopy.topbar.category}</b>
-              </span>
-              <span>{commonCopy.topbar.madeOnEarth}</span>
-            </span>
-            <span className='right'>
-              <a className='topbar-link' href={REPO_RELEASES} {...ext}>
-                <span className='pulse' />
-                {commonCopy.topbar.live} ·{' '}
-                <span data-github-version>{github.versionLabel}</span>
-              </a>
-              <details className='locale-switch' data-locale-switch>
-                <summary
-                  className='locale-trigger'
-                  aria-label={commonCopy.topbar.languageSwitcherLabel}
-                >
-                  <span className='locale-trigger-prefix' aria-hidden='true'>
-                    {commonCopy.topbar.languageSwitcherPrefix ?? 'Lang'}
-                  </span>
-                  <span className='locale-trigger-sep' aria-hidden='true'>
-                    ·
-                  </span>
-                  <span className='locale-trigger-code'>
-                    {localeDef.shortLabel}
-                  </span>
-                  <svg
-                    className='locale-trigger-caret'
-                    viewBox='0 0 8 5'
-                    aria-hidden='true'
-                    focusable='false'
-                  >
-                    <path
-                      d='M0.5 0.75 L4 4 L7.5 0.75'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth='1'
-                      strokeLinecap='square'
-                    />
-                  </svg>
-                </summary>
-                <div className='locale-menu' role='menu'>
-                  {localeOptions.map((entry) => (
-                    <a
-                      className={`locale-menu-item${
-                        entry.code === locale ? ' is-active' : ''
-                      }`}
-                      role='menuitem'
-                      data-locale-link
-                      data-locale-code={entry.code}
-                      href={entry.href}
-                      lang={entry.htmlLang}
-                      aria-current={entry.code === locale ? 'true' : undefined}
-                      key={entry.code}
-                    >
-                      <span className='locale-menu-code'>
-                        {entry.code.toUpperCase()}
-                      </span>
-                      <span className='locale-menu-label'>{entry.label}</span>
-                    </a>
-                  ))}
-                </div>
-              </details>
-            </span>
-          </div>
-        </div>
-
         {/* ====== NAV ====== */}
         {/* Headroom slide handled by `.site-chrome` wrapper above. */}
         <Header counts={counts} github={github} locale={locale} />
@@ -330,41 +269,45 @@ export default function Page({
         <section className='hero' id='top' data-od-id='hero'>
           <div className='container hero-grid'>
             <div className='hero-copy'>
-              <a
-                className='hero-discord-pill'
-                href={DISCORD}
-                aria-label={home.hero.discordAria}
-                {...ext}
-                data-reveal
-              >
-                <span aria-hidden='true'>●</span>
-                {home.hero.joinDiscord}
-              </a>
-              <span className='label' data-reveal>
-                {home.hero.label} <span className='ix'>· {home.hero.issue}</span>
-              </span>
               <h1 className='display' data-reveal>
-                {home.hero.titlePrefix} <em>{home.hero.titleEmphasis}</em>{' '}
-                {home.hero.titleMiddle} <em>{home.hero.titleSecondEmphasis}</em>
+                {home.hero.titlePrefix}
+                {home.hero.titleEmphasis ? (
+                  <>
+                    {home.hero.titlePrefix ? ' ' : null}
+                    <em>{home.hero.titleEmphasis}</em>
+                    {home.hero.titleBreakAfterEmphasis ? <br /> : null}
+                  </>
+                ) : null}
+                {home.hero.titleMiddle ? (
+                  <>
+                    {home.hero.titleBreakAfterEmphasis ? null : ' '}
+                    <span className='hero-title-line'>{home.hero.titleMiddle}</span>
+                  </>
+                ) : null}
+                {home.hero.titleSecondEmphasis ? (
+                  <>
+                    {' '}
+                    <em>{home.hero.titleSecondEmphasis}</em>
+                  </>
+                ) : null}
                 <span className='dot'>.</span>
               </h1>
               <p className='lead' data-reveal>
-                {home.hero.lead(skills, systems)}
+                <BreakText text={home.hero.lead(skills, systems)} />
               </p>
               <div className='hero-actions' data-reveal>
                 <a className='btn btn-ghost' href={REPO} {...ext}>
                   {home.hero.star}
-                  <span className='arrow'>{arrowOut}</span>
+                  <span className='arrow'>
+                    <svg className='icon-fill' viewBox='0 0 24 24' fill='currentColor'>
+                      <path d='M16.0037 9.41421L7.39712 18.0208L5.98291 16.6066L14.5895 8H7.00373V6H18.0037V17H16.0037V9.41421Z' />
+                    </svg>
+                  </span>
                 </a>
-                <a
-                  className='btn btn-primary'
-                  href={REPO_RELEASES}
-                  data-download-cta
-                  {...ext}
-                >
+                <a className='btn btn-primary' href={REPO_RELEASES} data-download-cta {...ext}>
                   {home.hero.download}
                   <span className='download-arch' data-download-arch hidden />
-                  <span className='arrow'>{arrowPlus}</span>
+                  <span className='arrow arrow-fill'>{arrowPlus}</span>
                 </a>
               </div>
               <div className='hero-stats' data-reveal>
@@ -390,55 +333,36 @@ export default function Page({
                   </span>
                 </div>
               </div>
-              <div className='hero-foot' data-reveal>
-                <span className='meta'>↳{NBSP}{NBSP}{home.hero.foot}</span>
-                <span className='coord'>
-                  52.5200° N{NBSP}·{NBSP}13.4050° E
-                </span>
-              </div>
             </div>
-            <div className='hero-art' data-reveal='scale'>
-              <span className='corner tl' />
-              <span className='corner tr' />
-              <span className='corner bl' />
-              <span className='corner br' />
-              <span className='annot annot-tl coord'>FIG. 01 / OD-26</span>
-              <span className='annot annot-tr'>{home.hero.plate}</span>
-              <span className='annot annot-bl coord'>SHA · a1b2c3d</span>
-              <span className='annot annot-br'>
-                {home.hero.composedIn}
-                {NBSP}
-                <span style={{ color: 'var(--coral)' }}>Open Design</span>
-              </span>
+            <div className='hero-scene-wrap'>
               <img
-                src={heroImage}
-                srcSet={heroImageSrcset}
-                sizes='(max-width: 768px) 100vw, 60vw'
-                width={1280}
-                height={1600}
+                className='hero-scene'
+                src='/hero-scene.gif'
                 alt=''
-                fetchPriority='high'
-                decoding='async'
+                width={132}
+                height={186}
+                aria-hidden='true'
+                data-hero-scene
               />
-              <div className='index'>
-                <span>
-                  <span className='n'>01</span>
-                  {home.hero.index[0]}
-                </span>
-                <span className='on'>
-                  <span className='n'>02</span>
-                  {home.hero.index[1]}
-                </span>
-                <span>
-                  <span className='n'>03</span>
-                  {home.hero.index[2]}
-                </span>
-                <span>
-                  <span className='n'>04</span>
-                  {home.hero.index[3]}
-                </span>
-              </div>
             </div>
+            <img
+              className='hero-dancer'
+              src={imageAsset('hero-dancer.png', { width: 560, quality: 82 })}
+              alt=''
+              width={694}
+              height={1097}
+              aria-hidden='true'
+              loading='lazy'
+            />
+            <img
+              className='hero-angel'
+              src={imageAsset('hero-angel.png', { width: 760, quality: 82 })}
+              alt=''
+              width={1002}
+              height={1239}
+              aria-hidden='true'
+              loading='lazy'
+            />
           </div>
         </section>
 
@@ -1020,7 +944,7 @@ export default function Page({
               </a>
             </div>
             <div className='work-arrows'>
-              <button type='button' className='nav-btn'>
+              <button type='button' className='nav-btn' data-carousel-dir='prev'>
                 <svg
                   width='14'
                   height='14'
@@ -1032,7 +956,7 @@ export default function Page({
                   <path d='M14 6l-6 6 6 6' />
                 </svg>
               </button>
-              <button type='button' className='nav-btn active'>
+              <button type='button' className='nav-btn active' data-carousel-dir='next'>
                 <svg
                   width='14'
                   height='14'
@@ -1179,12 +1103,62 @@ export default function Page({
                     <small>{home.testimonial.partnerLabels[4]}</small>
                   </a>
                 </div>
-                <a className='read-more' href={REPO} {...ext}>
+                <a className='read-more' href={href('/solutions/')}>
                   {home.testimonial.readMore}
                 </a>
               </div>
               <div className='testimonial-art' data-reveal='right'>
                 <LazyImg src={imageAsset('testimonial.png', { width: 1024, quality: 82 })} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ====== AMR band ======
+          The "Open Design AMR" model band: AMR is the built-in design Agent
+          that ships SOTA frontier models out of the box (zero provider setup,
+          real token-metered billing). Sits directly under the testimonial,
+          outside the roman-numbered main sequence. A static monochrome row of
+          vendor logos, trailing with an ellipsis to signal "and more". */}
+        <section className='amr-band' data-od-id='amr-band' data-reveal>
+          <div className='container'>
+            <div className='amr-band-inner'>
+              <span className='amr-band-kicker'>{home.amrBand.kicker}</span>
+              <h2 className='amr-band-title'>{home.amrBand.title}</h2>
+              <p className='amr-band-lead'>{home.amrBand.lead}</p>
+              <ul className='amr-band-chips' aria-label={home.amrBand.kicker}>
+                {home.amrBand.chips.map((chip) => (
+                  <li className='amr-band-chip' key={chip}>
+                    <span className='amr-band-chip-dot' aria-hidden='true' />
+                    {chip}
+                  </li>
+                ))}
+              </ul>
+              <ul
+                className='amr-band-logos'
+                aria-label={home.amrBand.logosAriaLabel}
+              >
+                {amrModelLogos.map((m) => (
+                  <li key={m.slug}>
+                    <img
+                      className='amr-band-logo'
+                      src={`/agents/${m.slug}.svg`}
+                      alt={m.name}
+                      title={m.name}
+                      width={26}
+                      height={26}
+                      loading='lazy'
+                    />
+                  </li>
+                ))}
+                <li className='amr-band-more' aria-label={home.amrBand.moreAriaLabel}>
+                  …
+                </li>
+              </ul>
+              <div className='amr-band-actions'>
+                <a className='nav-cta amr-band-cta' href={AMR_URL}>
+                  {home.amrBand.cta}
+                </a>
               </div>
             </div>
           </div>
@@ -1295,16 +1269,97 @@ export default function Page({
           </div>
         </section>
 
+        {/* ====== NEWSLETTER ====== */}
+        <section className='newsletter' id='newsletter' data-od-id='newsletter'>
+          <div className='container'>
+            <div className='newsletter-card' data-reveal>
+              <div className='newsletter-copy'>
+                <span className='label'>{home.newsletter.label}</span>
+                <h2 className='newsletter-title'>{home.newsletter.title}</h2>
+                <p className='lead'>{home.newsletter.lead}</p>
+              </div>
+              <form
+            className='newsletter-form'
+            data-newsletter-form
+            data-source='landing'
+            data-success={home.newsletter.success}
+            data-error={home.newsletter.error}
+          >
+                <input
+                  className='newsletter-input'
+                  type='email'
+                  name='email'
+                  required
+                  autoComplete='email'
+                  placeholder={home.newsletter.placeholder}
+                  aria-label={home.newsletter.placeholder}
+                  data-newsletter-email
+                />
+                <button className='btn btn-primary newsletter-submit' type='submit'>
+                  {home.newsletter.button}
+                </button>
+                <p className='newsletter-msg' data-newsletter-msg aria-live='polite'></p>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        {/* ====== NEWSLETTER POPUP (hidden until JS shows it) ====== */}
+        <aside
+          className='newsletter-popup'
+          data-newsletter-popup
+          hidden
+          role='dialog'
+          aria-label={home.newsletter.title}
+        >
+          <button
+            className='newsletter-popup__close'
+            type='button'
+            data-newsletter-dismiss
+            aria-label={home.newsletter.dismiss}
+          >
+            ×
+          </button>
+          <span className='label'>{home.newsletter.label}</span>
+          <h3 className='newsletter-popup__title'>{home.newsletter.title}</h3>
+          <p className='newsletter-popup__lead'>{home.newsletter.lead}</p>
+          <form
+            className='newsletter-form'
+            data-newsletter-form
+            data-source='landing'
+            data-success={home.newsletter.success}
+            data-error={home.newsletter.error}
+          >
+            <input
+              className='newsletter-input'
+              type='email'
+              name='email'
+              required
+              autoComplete='email'
+              placeholder={home.newsletter.placeholder}
+              aria-label={home.newsletter.placeholder}
+              data-newsletter-email
+            />
+            <button className='btn btn-primary newsletter-submit' type='submit'>
+              {home.newsletter.button}
+            </button>
+            <p className='newsletter-msg' data-newsletter-msg aria-live='polite'></p>
+          </form>
+        </aside>
+
         {/* ====== FOOTER ====== */}
         <footer data-od-id='footer'>
           <div className='container'>
             <div className='foot-grid'>
               <div className='foot-brand'>
                 <a href='#top' className='brand'>
-                  <span className='brand-mark'>
-                    <img src='/logo.webp' alt='' width={44} height={44} />
-                  </span>
-                  <span className='brand-name'>Open Design</span>
+                  <img
+                    className='brand-logo'
+                    src='/open-design-brand.svg'
+                    alt='Open Design'
+                    width={204}
+                    height={83}
+                  />
                 </a>
                 <p style={{ marginTop: 18 }}>
                   {home.footer.summary}
@@ -1322,6 +1377,20 @@ export default function Page({
                     <span data-github-version>{github.versionLabel}</span>
                   </span>
                 </a>
+              </div>
+              <div className='foot-col'>
+                <h5>{ui.footer.products}</h5>
+                <ul>
+                  <li>
+                    <a href={href('/')}>Open Design</a>
+                  </li>
+                  <li>
+                    <a href={href('/html-anything/')}>{ui.footer.htmlAnything}</a>
+                  </li>
+                  <li>
+                    <a href={href('/html-video/')}>{ui.footer.htmlVideo}</a>
+                  </li>
+                </ul>
               </div>
               <div className='foot-col'>
                 <h5>{home.footer.columns.studio}</h5>

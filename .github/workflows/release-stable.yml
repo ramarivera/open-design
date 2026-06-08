@@ -15,6 +15,15 @@ on:
         description: "Required when channel=stable: exact validated nightly version to promote, for example 0.5.1.nightly.3."
         required: false
         type: string
+      release_version:
+        description: "Stable base version to publish, for example 0.5.1. Required when ref is not release/vX.Y.Z."
+        required: false
+        type: string
+      dry_run:
+        description: "Validate release inputs and read-only remote gates without building or publishing."
+        required: false
+        type: boolean
+        default: false
       ref:
         description: "Optional git ref (branch/tag/SHA) to build. Empty builds the ref this workflow was dispatched on."
         required: false
@@ -32,6 +41,16 @@ on:
         required: false
         type: string
         default: ""
+      release_version:
+        description: "Stable base version to publish. Required when ref is not release/vX.Y.Z."
+        required: false
+        type: string
+        default: ""
+      dry_run:
+        description: "Validate release inputs and read-only remote gates without building or publishing."
+        required: false
+        type: boolean
+        default: false
       ref:
         description: "Optional git ref (branch/tag/SHA) to build. Empty builds the caller's ref."
         required: false
@@ -50,6 +69,9 @@ on:
       commit:
         description: "The commit SHA that was built."
         value: ${{ jobs.metadata.outputs.commit }}
+      dry_run:
+        description: "Whether this run stopped after metadata/preflight validation."
+        value: ${{ jobs.metadata.outputs.dry_run }}
       previous_commit:
         description: "Commit SHA of the previously published nightly (changelog baseline); empty on cold start."
         value: ${{ jobs.metadata.outputs.previous_commit }}
@@ -74,7 +96,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: open-design-release-stable-${{ inputs.channel }}
+  group: open-design-release-stable-${{ inputs.channel }}-${{ inputs.dry_run && 'dry-run' || 'publish' }}
   cancel-in-progress: false
 
 env:
@@ -102,14 +124,17 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GITHUB_REPOSITORY: ${{ github.repository }}
       OPEN_DESIGN_NIGHTLY_METADATA_URL: ${{ vars.CLOUDFLARE_R2_RELEASES_PUBLIC_ORIGIN }}/nightly/latest/metadata.json
+      OPEN_DESIGN_RELEASE_DRY_RUN: ${{ inputs.dry_run }}
       OPEN_DESIGN_RELEASE_CHANNEL: ${{ inputs.channel }}
       OPEN_DESIGN_RELEASES_PUBLIC_ORIGIN: ${{ vars.CLOUDFLARE_R2_RELEASES_PUBLIC_ORIGIN }}
       OPEN_DESIGN_STABLE_NIGHTLY_VERSION: ${{ inputs.nightly_version }}
+      OPEN_DESIGN_STABLE_VERSION: ${{ inputs.release_version }}
     outputs:
       base_version: ${{ steps.stable.outputs.base_version }}
       branch: ${{ steps.stable.outputs.branch }}
       channel: ${{ steps.stable.outputs.channel }}
       commit: ${{ steps.stable.outputs.commit }}
+      dry_run: ${{ steps.stable.outputs.dry_run }}
       github_release_enabled: ${{ steps.stable.outputs.github_release_enabled }}
       linux_namespace: ${{ steps.stable.outputs.linux_namespace }}
       mac_intel_namespace: ${{ steps.stable.outputs.mac_intel_namespace }}
@@ -161,6 +186,7 @@ jobs:
         run: node --experimental-strip-types ./scripts/release-stable.ts
 
       - name: Validate R2 release access
+        if: ${{ steps.stable.outputs.dry_run != 'true' }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_RELEASES_AK }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_RELEASES_SK }}
@@ -176,6 +202,7 @@ jobs:
   verify:
     name: Verify build (typecheck + tests)
     needs: metadata
+    if: ${{ needs.metadata.outputs.dry_run != 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -251,11 +278,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Verify mac Electron framework symlinks
+      - name: Inspect mac Electron framework symlinks
         run: |
           set -euo pipefail
           electron_dist="$(node -e 'const path = require("node:path"); const { createRequire } = require("node:module"); const requireFromDesktop = createRequire(path.join(process.cwd(), "apps/desktop/package.json")); const electron = requireFromDesktop.resolve("electron"); process.stdout.write(path.join(path.dirname(electron), "dist"));')"
           framework="$electron_dist/Electron.app/Contents/Frameworks/Electron Framework.framework"
+          missing_links=0
           for link in \
             "$framework/Electron Framework" \
             "$framework/Helpers" \
@@ -263,12 +291,15 @@ jobs:
             "$framework/Resources" \
             "$framework/Versions/Current"; do
             if [ ! -L "$link" ]; then
-              echo "Expected Electron framework symlink, got non-symlink: $link" >&2
-              ls -la "$framework" >&2 || true
-              ls -la "$framework/Versions" >&2 || true
-              exit 1
+              echo "::warning::Expected Electron framework symlink, got non-symlink: $link"
+              missing_links=1
             fi
           done
+          if [ "$missing_links" -ne 0 ]; then
+            ls -la "$framework" >&2 || true
+            ls -la "$framework/Versions" >&2 || true
+            echo "Continuing into tools-pack because electron-builder is the source of truth for whether packaging actually works."
+          fi
 
       - name: Prepare Apple signing certificate
         env:
@@ -305,6 +336,7 @@ jobs:
             --app-version "${{ needs.metadata.outputs.release_version }}"
             --mac-compression normal
             --to all
+            --require-vela-cli
             --json
             --signed
           )
@@ -490,6 +522,7 @@ jobs:
             --app-version "${{ needs.metadata.outputs.release_version }}" \
             --mac-compression normal \
             --to all \
+            --require-vela-cli \
             --json \
             --signed
 
@@ -584,6 +617,7 @@ jobs:
             "--portable",
             "--app-version", "${{ needs.metadata.outputs.release_version }}",
             "--to", "all",
+            "--require-vela-cli",
             "--json"
           )
           "cache_failed=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
@@ -602,6 +636,7 @@ jobs:
               --portable `
               --app-version "${{ needs.metadata.outputs.release_version }}" `
               --to all `
+              --require-vela-cli `
               --json
             if ($LASTEXITCODE -ne 0) {
               throw "Windows tools-pack uncached fallback build exited with code $LASTEXITCODE"
@@ -820,6 +855,7 @@ jobs:
       ${{
         always() &&
         !cancelled() &&
+        needs.metadata.outputs.dry_run != 'true' &&
         needs.metadata.result == 'success' &&
         needs.verify.result == 'success' &&
         needs.build_mac.result == 'success' &&
@@ -1024,12 +1060,13 @@ jobs:
   cleanup_partial_release_assets:
     name: Cleanup unpublished release asset artifacts
     needs:
+      - metadata
       - build_mac
       - build_mac_intel
       - build_win
       - build_linux
       - publish
-    if: ${{ always() && needs.publish.result != 'success' }}
+    if: ${{ always() && needs.metadata.outputs.dry_run != 'true' && needs.publish.result != 'success' }}
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}

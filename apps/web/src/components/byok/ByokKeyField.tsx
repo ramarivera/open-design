@@ -1,23 +1,16 @@
-import type { Ref } from 'react';
+import { useState, type Ref } from 'react';
 import { API_KEY_PLACEHOLDERS } from '../../state/apiProtocols';
-import type { ApiProtocol, ConnectionTestResponse } from '../../types';
-import { Icon } from '../Icon';
-
-type ByokProviderTestState =
-  | { status: 'idle' }
-  | { status: 'running' }
-  | { status: 'done'; result: ConnectionTestResponse };
+import type { ApiProtocol } from '../../types';
+import { cleanByokApiKey } from './validation';
 
 interface ByokKeyFieldProps {
   apiKey: string;
-  apiKeyAuthFailed: boolean;
   apiKeyConsoleLink: { host: string; url: string };
   apiProtocol: ApiProtocol;
-  baseUrlValid: boolean;
-  canRunConnectionTest: boolean;
   inputRef: Ref<HTMLInputElement>;
   labels: {
     apiHint: string;
+    apiKeyCleaned: string;
     apiKey: string;
     apiKeyGetLink: string;
     apiKeyInvalid: string;
@@ -26,49 +19,57 @@ interface ByokKeyFieldProps {
     required: string;
     show: string;
     showKey: string;
-    test: string;
-    testRetry: string;
-    testRunning: string;
-    testTitle: string;
   };
-  providerTestState: ByokProviderTestState;
-  renderTestMessage: (result: ConnectionTestResponse) => string;
   requiresApiKey: boolean;
+  showApiKeyInvalid: boolean;
   showApiKey: boolean;
   onBlur: () => void;
   onChange: (value: string) => void;
   onFocus: () => void;
-  onTestProvider: () => void | Promise<void>;
   onToggleShowApiKey: () => void;
 }
 
 export function ByokKeyField({
   apiKey,
-  apiKeyAuthFailed,
   apiKeyConsoleLink,
   apiProtocol,
-  baseUrlValid,
-  canRunConnectionTest,
   inputRef,
   labels,
-  providerTestState,
-  renderTestMessage,
   requiresApiKey,
+  showApiKeyInvalid,
   showApiKey,
   onBlur,
   onChange,
   onFocus,
-  onTestProvider,
   onToggleShowApiKey,
 }: ByokKeyFieldProps) {
+  const [apiKeyCleanedNotice, setApiKeyCleanedNotice] = useState(false);
+  const fieldClassName =
+    requiresApiKey && !apiKey.trim()
+      ? 'field settings-byok-required-empty'
+      : 'field';
+  const handleChange = (value: string) => {
+    setApiKeyCleanedNotice(false);
+    onChange(value);
+  };
+  const handleBlur = () => {
+    setApiKeyCleanedNotice(cleanByokApiKey(apiKey) !== apiKey);
+    onBlur();
+  };
+
   return (
-    <label className="field">
+    <label className={fieldClassName}>
       <span className="field-label-row">
-        <span className="field-label">
+        <span className="field-label settings-byok-key-label">
           {labels.apiKey}
           {requiresApiKey ? (
             <span className="field-required" aria-label={labels.required}>
               *
+            </span>
+          ) : null}
+          {showApiKeyInvalid ? (
+            <span className="field-label-error" role="alert">
+              {labels.apiKeyInvalid}
             </span>
           ) : null}
         </span>
@@ -90,8 +91,9 @@ export function ByokKeyField({
           type={showApiKey ? 'text' : 'password'}
           placeholder={API_KEY_PLACEHOLDERS[apiProtocol]}
           value={apiKey}
-          onChange={(e) => onChange(e.target.value)}
-          onBlur={onBlur}
+          aria-invalid={showApiKeyInvalid || undefined}
+          onChange={(e) => handleChange(e.target.value)}
+          onBlur={handleBlur}
           onFocus={onFocus}
           autoFocus
         />
@@ -106,65 +108,14 @@ export function ByokKeyField({
           {showApiKey ? labels.hide : labels.show}
         </button>
       </div>
-      {apiKeyAuthFailed && providerTestState.status === 'idle' ? (
-        <span className="field-error" role="alert">
-          {labels.apiKeyInvalid}
-        </span>
-      ) : null}
-      {providerTestState.status === 'running' ? (
-        <span
-          className="field-inline-status running"
-          role="status"
-          aria-live="polite"
-        >
-          {labels.testRunning}
-        </span>
-      ) : providerTestState.status === 'done' ? (
-        <span
-          className={
-            providerTestState.result.ok
-              ? 'field-inline-status success'
-              : 'field-error'
-          }
-          role={providerTestState.result.ok ? 'status' : 'alert'}
-        >
-          {renderTestMessage(providerTestState.result)}
+      {apiKeyCleanedNotice && !showApiKeyInvalid ? (
+        <span className="field-inline-status success" role="status">
+          {labels.apiKeyCleaned}
         </span>
       ) : null}
       <span className="field-inline-status">
         {labels.apiHint}
       </span>
-      {canRunConnectionTest && baseUrlValid ? (
-        <button
-          type="button"
-          className={
-            'ghost icon-btn settings-test-btn' +
-            (providerTestState.status === 'running' ? ' loading' : '')
-          }
-          onClick={() => void onTestProvider()}
-          disabled={providerTestState.status === 'running'}
-          title={labels.testTitle}
-        >
-          {providerTestState.status === 'running' ? (
-            <>
-              <Icon
-                name="spinner"
-                size={13}
-                className="icon-spin"
-              />
-              <span>{labels.test}</span>
-            </>
-          ) : providerTestState.status === 'done' &&
-            !providerTestState.result.ok ? (
-            <>
-              <Icon name="reload" size={13} />
-              <span>{labels.testRetry}</span>
-            </>
-          ) : (
-            labels.test
-          )}
-        </button>
-      ) : null}
     </label>
   );
 }

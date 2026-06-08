@@ -213,6 +213,13 @@ export function createClaudeStreamHandler(onEvent: EventSink) {
       if (stopReason) {
         onEvent({ type: 'turn_end', stopReason });
       }
+      if (typeof obj.error === 'string' && obj.error.trim()) {
+        onEvent({
+          type: 'error',
+          message: assistantText(obj.message.content) || obj.error,
+          code: obj.error,
+        });
+      }
       currentMessageStreamedText = false;
       currentMessageStreamedThinking = false;
       return;
@@ -245,6 +252,16 @@ export function createClaudeStreamHandler(onEvent: EventSink) {
       });
       return;
     }
+  }
+
+  function assistantText(content: unknown[]): string {
+    const parts: string[] = [];
+    for (const block of content) {
+      if (isRecord(block) && block.type === 'text' && typeof block.text === 'string') {
+        parts.push(block.text);
+      }
+    }
+    return parts.join('\n').trim();
   }
 
   function handleStreamEvent(ev: Record<string, unknown>) {
@@ -295,6 +312,14 @@ export function createClaudeStreamHandler(onEvent: EventSink) {
       if (delta.type === 'input_json_delta' && typeof delta.partial_json === 'string') {
         if (state && state.type === 'tool_use') {
           state.input += delta.partial_json;
+          if (typeof state.id === 'string' && typeof state.name === 'string') {
+            onEvent({
+              type: 'tool_input_delta',
+              id: state.id,
+              name: state.name,
+              delta: delta.partial_json,
+            });
+          }
         }
         return;
       }
